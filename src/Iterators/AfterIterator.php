@@ -1,4 +1,5 @@
 <?php
+
 namespace WATR\Iterators;
 
 use GuzzleHttp\Client;
@@ -17,7 +18,8 @@ abstract class AfterIterator implements Iterator
     public $total_items;
     public $error;
 
-    public function __construct(Client $client, string $endpoint, array $params, int $requestDelayMs = 1000) {
+    public function __construct(Client $client, string $endpoint, array $params, int $requestDelayMs = 1000)
+    {
         $this->client = $client;
         $this->endpoint = $endpoint;
         $this->params = $params;
@@ -37,6 +39,7 @@ abstract class AfterIterator implements Iterator
      * @link http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
      * @since 5.0.0
+     * @throws \Exception
      */
     public function next()
     {
@@ -47,15 +50,19 @@ abstract class AfterIterator implements Iterator
 
         $next = next($this->response);
         if ($next === false) {
-            usleep( $this->page > 1 ? $this->requestDelayMs : 0 );
+            usleep($this->page > 1 ? $this->requestDelayMs : 0);
             $before = $this->lastItemToken !== null ? ['before' => $this->lastItemToken] : [];
             $options = [
                 'query' => array_merge($this->params, $before)
             ];
-            $rawResponse = $this->client->get($this->endpoint, $options);
-            $response = json_decode($rawResponse->getBody());
-            $this->total_items = $response->total_items;
-            $this->response = $response->items;
+            try {
+                $rawResponse = $this->client->get($this->endpoint, $options);
+                $response = json_decode($rawResponse->getBody());
+                $this->total_items = $response->total_items;
+                $this->response = $response->items;
+            } catch (\Exception $e) {
+                throw $e;
+            }
         }
     }
 

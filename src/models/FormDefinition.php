@@ -22,7 +22,7 @@ class FormDefinition
     public $title;
 
     /**
-     * var Field[] settings
+     * @var Field[] settings
      */
     public $fields = [];
 

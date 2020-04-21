@@ -90,16 +90,27 @@ class FormResponse
      */
     public function getAnswerByRef($ref)
     {
-        $field = $this->definition->getFieldByRef($ref);
         $result = null;
+        if (!$this->definition) {
+            foreach($this->answers as $answer) {
+                if($answer->ref === $ref) {
+                    $result = $answer;
+                    break;
+                }
+            }
 
-        if($ref === -1 || $field === -1){ return -1; }
+            return [
+                'field' => null,
+                'answer' => $result
+            ];
+        }
 
-        foreach($this->answers as $answer)
-        {
-            if($answer->field_identifier === $field->id)
-            {
+        $field = $this->definition->getFieldByRef($ref);
+        if($field === -1){ return -1; }
+        foreach($this->answers as $answer) {
+            if($answer->field_identifier === $field->id) {
                 $result = $answer;
+                break;
             }
         }
 

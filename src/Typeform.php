@@ -6,7 +6,7 @@ use GuzzleHttp\RequestOptions;
 use WATR\Iterators\AfterIterator;
 use WATR\Iterators\FormIterator;
 use WATR\Iterators\PageIterator;
-use WATR\Iterators\ResoinseIterator;
+use WATR\Iterators\ResponseIterator;
 use WATR\Models\Form;
 use WATR\Models\FormResponse;
 use WATR\Models\WebhookResponse;
@@ -17,7 +17,7 @@ use WATR\Models\WebhookResponse;
 class Typeform
 {
     /**
-     * @var  GuzzleHttp\Client
+     * @var Client
      */
     protected $http;
 
@@ -66,7 +66,7 @@ class Typeform
      */
     public function getResponses($formId, array $params = [])
     {
-        return new ResoinseIterator($this->http, "/forms/" . $formId . "/responses", $params);
+        return new ResponseIterator($this->http, "/forms/" . $formId . "/responses", $params);
 //        $response = $this->http->get("/forms/" . $formId . "/responses");
 //        $body = json_decode($response->getBody());
 //        $responses = [];

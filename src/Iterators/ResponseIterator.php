@@ -11,7 +11,7 @@ namespace WATR\Iterators;
 
 use WATR\Models\FormResponse;
 
-class ResoinseIterator extends AfterIterator
+class ResponseIterator extends AfterIterator
 {
 
     /**
